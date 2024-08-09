@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h2> SNACKS LIST</h2>
+            <ul>
+                {% for snacks in snack %}
+                    <li>{{ snacks.name }}
+                    {% comment %} <a href="">Edit</a> {% endcomment %}
+                    {% comment %} <a href="{% url 'delete_snack' snack.id %}">Delete</a> {% endcomment %}
+                    </li>
+                {% endfor %}
+                
+
+            </ul>
+            <div>
+                <a href="{% url 'add_snacks' %}">Add Snacks</a>
+            </div>
+            <div>
+                <a href="{% url 'add_store' %}">Add Store</a>
+            </div>
+        </form>
+    </body>
+</html>

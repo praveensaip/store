@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Store List</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% comment %} <style> {% endcomment %}
+        {% comment %} body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+        }
+        table, th, td {
+            border: 1px solid #dddddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background-color: #1a73e8;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #1558b0;
+        }
+    </style> {% endcomment %}
+</head>
+<body>
+    <h2>Store List</h2>
+    <table border="2">
+        <thead>
+            <tr>
+                <th>Store Name</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Snacks</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for store in storelist %}
+            <tr>
+                <td>{{ store.storename }}</td>
+                <td>{{ store.qty }}</td>
+                <td>{{ store.rate }}</td>
+                <td>
+                    <ul>
+                        {% for snack in store.snacks.all %}
+                        <li>{{ snack.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <a href="{% url 'update_store' store.id %}">Edit</a>
+                    <br>
+                    <a href="{% url 'delete_store' store.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'add_store' %}" class="button">Add Store</a>
+</body>
+</html>

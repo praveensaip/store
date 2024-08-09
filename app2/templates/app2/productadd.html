@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>
+        <p class="btn btn-dark"> Add Products </p>
+        <div class="card-body">
+        <form method="POST" action="{% url 'productadd' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="form-group col-md-4">
+                  <label for="productname"><strong>Product Name</strong></label>
+                  <input type="text" class="form-control" name='productname' value="{{productname}}" placeholder="Enter Product Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group col-md-4">
+                    <label for="productcode"><strong>Product Code</strong></label>
+                    <input type="text" class="form-control" name='productcode' value="{{productcode}}" placeholder="Enter Product Code">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group col-md-4">
+                    <label for="productname"><strong>Product Cost</strong></label>
+                    <input type="number" class="form-control" name='price' value="{{cost}}" placeholder="Enter Product Cost">
+                </div>
+            </div>
+            <div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{% url 'export_products_to_excel' %}">Export to Excel</a>
+            {% comment %} <form method="POST" action="{% url 'addstore' %}">
+                {% csrf_token %}
+                <button class="btn btn-primary">Add Store</button>
+            </form> {% endcomment %}
+            {% comment %} <a href="{% url 'addstore' %}">Add Store {% endcomment %}
+            </div><br>
+            <div>
+            {% if error_message %}
+                <p style="color:Red;"><strong>{{error_message}}</strong></p>
+            {% endif %}
+            </div>
+        </div>
+    </div> 
+    </form>
+        <p class="btn btn-dark"> Product List </p> <p class="btn btn-dark">Total number of products: {{ count }}</p>
+        <table class="table table-bordered">
+            <thead  class="thead-light">
+              <tr>
+                <th><strong>Product Name</strong></th>
+                <th><strong>Product Code</strong></th>
+                <th><strong>Product Cost</strong></th>
+                <th><strong>Update</strong></th>
+                <th><strong>Delete</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td><a href="{% url 'updateproduct' product.id %}">{{product.productname}}</td>
+                    <td>{{product.productcode}}</td>
+                    <td>{{product.cost}}</td>
+                    {% comment %} <td><button type="button" class="btn btn-success">Success</button> <button type="button" class="btn btn-danger">Danger</button> </td> {% endcomment %}
+                    <td>
+                        <form method="" action="{% url 'updateproduct' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-success">Update<a>
+                        </form>  
+                    </td>
+                    <td>
+                        <form method="POST" action="{% url 'deleteproduct' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-danger" class="alert alert-primary" onclick="return confirm('Are you sure you want to delete this product:{{product.productname}}?');">Delete<a>
+                        </form>  
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </tbody>
+    </table>
+</body>
+</html>

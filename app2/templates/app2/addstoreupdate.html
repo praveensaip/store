@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Update Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <p class="btn btn-dark">Update Store</p>
+        <div class="card-body">
+            <!-- Use store.storename in the URL -->
+            <form method="POST" action="{% url 'updatestore' store.storename %}">
+                {% csrf_token %}
+                
+                <!-- Since store is a single instance, no need for a loop -->
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="storename">Store Name</label>
+                        <input type="text" class="form-control" id="storename" name="storename" value="{{ store.storename }}" placeholder="Enter Store Name" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="invoiceno">Invoice No</label>
+                        <input type="number" class="form-control" id="invoiceno" name="invoiceno" value="{{ store.invoiceno }}" placeholder="Enter Invoice No" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control" name="date" id="date" value="{{ store.date }}" required>
+                    </div>
+                </div>
+
+                <div id="products-container">
+                    <!-- Display existing products if needed -->
+                    <div class="form-row product-row">
+                        <div class="form-group col-md-3">
+                            <label for="product">Product</label>
+                            <select class="form-control" name="products[0][product]" required>
+                                <option value="">Select Product</option>
+                                {% for product in products %}
+                                    <option value="{{ product.id }}">{{ product.productname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="pieces">Pieces</label>
+                            <input type="number" class="form-control" name="products[0][pieces]" placeholder="Enter the number of pieces" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="units">Units</label>
+                            <input type="number" class="form-control" name="products[0][units]" placeholder="Enter the Units" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="amount">Amount</label>
+                            <input type="number" class="form-control" name="products[0][amount]" placeholder="Enter the Amount" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-outline-success" id="add-product">Add Another Product</button>
+                <button type="submit" class="btn btn-primary">Update Store</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('add-product').addEventListener('click', function() {
+        const container = document.getElementById('products-container');
+        const productCount = container.querySelectorAll('.product-row').length;
+        const newProductRow = document.createElement('div');
+        newProductRow.classList.add('form-row', 'product-row');
+        newProductRow.innerHTML = `
+            <div class="form-group col-md-3">
+                <label for="product">Product</label>
+                <select class="form-control" name="products[${productCount}][product]" required>
+                    <option value="">Select Product</option>
+                    {% for product in products %}
+                        <option value="{{ product.id }}">{{ product.productname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="pieces">Pieces</label>
+                <input type="number" class="form-control" name="products[${productCount}][pieces]" placeholder="Enter the number of pieces" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="units">Units</label>
+                <input type="number" class="form-control" name="products[${productCount}][units]" placeholder="Enter the Units" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="amount">Amount</label>
+                <input type="number" class="form-control" name="products[${productCount}][amount]" placeholder="Enter the Amount" required>
+            </div>
+        `;
+        container.appendChild(newProductRow);
+    });
+    </script>
+</body>
+</html>

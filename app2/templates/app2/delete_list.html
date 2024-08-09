@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+       <h2>Delete {{ store.storename }}</h2>
+        <form method="POST" action="{% url "delete_list" store.id %}">
+            <P> Do You Want to Delete the Store List </p>
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+            <a href="{% url 'store_list' %}">Cancel</button>
+            {% comment %} <a href="{% url 'store_list' %}">Store List</button> {% endcomment %}
+        </form>
+    </body>
+</html>

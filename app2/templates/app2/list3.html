@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+    <form id="addProductForm" method="POST">
+        {% csrf_token %}
+        <input type="text" id="productName" name="name" placeholder="Product Name" required>
+        <input type="number" id="productPrice" name="price" placeholder="Product Price" required>
+        <button type="submit">Add Product</button>
+    </form>
+    <div id="response"></div>
+    <script>
+        function getCsrfToken() {
+            const name = 'csrftoken';
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        document.getElementById('addProductForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const productName = document.getElementById('productName').value;
+            const productPrice = document.getElementById('productPrice').value;
+            
+            fetch('/demo/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken() // Correctly get the CSRF token from the cookie
+                },
+                body: JSON.stringify({
+                    name: productName,
+                    price: productPrice
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Parse JSON if response is OK
+                } else {
+                    return response.text(); // Parse as text if not OK (e.g., error page)
+                }
+            })
+            .then(data => {
+                if (typeof data === 'string') {
+                    // If response is a string, try to parse it as JSON
+                    try {
+                        data = JSON.parse(data);
+                    } catch (e) {
+                        console.error('Failed to parse JSON:', data);
+                        return;
+                    }
+                }
+                console.log('Product added:', data);
+                document.getElementById('response').innerHTML = `
+                    <p>ID: ${data.id}</p>
+                    <p>Name: ${data.name}</p>
+                    <p>Price: ${data.price}</p>
+                `;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

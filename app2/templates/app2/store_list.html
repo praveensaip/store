@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Store List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        table, th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background-color: #1a73e8;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #1558b0;
+        }
+    </style>
+</head>
+<body>
+    <p>Store List</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Store Name</th>
+                <th>Snacks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for store in stores %}
+            <tr>
+                <td>{{ store.storename }}</td>
+                <td>
+                    {% comment %} <form method="POST" action="">
+                        {% csrf_token %} {% endcomment %}
+                    <a href="{% url "delete_list" store.id %}">Delete</button>
+                </td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Snack Name</th>
+                                <th>Quantity</th>
+                                <th>Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for store_snack in store.store_snacks.all %}
+                            <tr>
+                                <td>{{ store_snack.snack.name }}</td>
+                                <td>{{ store_snack.qty }}</td>
+                                <td>{{ store_snack.rate }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'add_store' %}" class="button">Add Store</a>
+</body>
+</html>
